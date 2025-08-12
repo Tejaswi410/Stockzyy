@@ -11,7 +11,7 @@ st.set_page_config(page_title="📈 Stock Forecast App", layout="wide")
 
 # --- Sidebar Navigation ---
 st.sidebar.page_link("1_🏠_Homepage.py", label="Homepage")
-st.sidebar.page_link("2_📈_prediction.py", label="Stock Prediction")
+st.sidebar.page_link("pages/2_📈_prediction.py", label="Stock Prediction")
 
 # Title
 st.title("📈 Stock Price Prediction")

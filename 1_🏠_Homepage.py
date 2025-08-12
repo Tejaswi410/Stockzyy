@@ -11,7 +11,7 @@ st.header("🔍 Stock Information")
 
 # --- Sidebar Navigation ---
 st.sidebar.page_link("1_🏠_Homepage.py", label="Homepage")
-st.sidebar.page_link("2_📈_prediction.py", label="Stock Prediction")
+st.sidebar.page_link("pages/2_📈_prediction.py", label="Stock Prediction")
 
 # --- Stock Ticker Input ---
 ticker_symbol = st.text_input("Enter Stock Ticker", "AAPL", help="Enter a valid stock ticker symbol, e.g., GOOG, MSFT, TSLA")
