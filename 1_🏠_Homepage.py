@@ -1,52 +1,49 @@
 import streamlit as st
-import yfinance as fn
+import yfinance as yf
+import pandas as pd
 
 st.set_page_config(
     page_title="Stocks prediction",
     page_icon="💰",
 )
 
-st.header(" _Stocks prediction AI_ ")
+st.header("🔍 Stock Information")
 
+# --- Sidebar Navigation ---
+st.sidebar.page_link("1_🏠_Homepage.py", label="Homepage")
+st.sidebar.page_link("pages/2_prediction.py", label="Stock Prediction")
 
-def get_ticker(name):
-    company = fn.Ticker(name)
-    return company
+# --- Stock Ticker Input ---
+ticker_symbol = st.text_input("Enter Stock Ticker", "AAPL", help="Enter a valid stock ticker symbol, e.g., GOOG, MSFT, TSLA")
 
-c1 = get_ticker("AAPL")
-c2 = get_ticker("MSFT")
-c3 = get_ticker("TSLA")
-c4 = get_ticker("TCS.BO")
+if ticker_symbol:
+    try:
+        # --- Get Ticker Information ---
+        company = yf.Ticker(ticker_symbol)
+        
+        # --- Fetch Historical Data ---
+        # Get data for the last 3 months
+        data = company.history(period="3mo")
 
-apple = fn.download("AAPL", start = "2023-7-20", end = "2023-9-20")
-microsoft = fn.download("MSFT", start = "2023-7-20", end = "2023-9-20")
-tesla = fn.download("TSLA", start = "2023-7-20", end = "2023-9-20")
-tcs =  fn.download("TCS.BO", start = "2023-7-20", end = "2023-9-20")
+        if data.empty:
+            st.warning(f"No historical data found for '{ticker_symbol}'. Please check the ticker symbol.")
+        else:
+            # --- Display Company Information ---
+            st.write(f"### {company.info.get('longName', ticker_symbol)}")
+            
+            # Show long business summary if available
+            if 'longBusinessSummary' in company.info:
+                st.write(company.info['longBusinessSummary'])
+            else:
+                st.info("No business summary available for this company.")
 
-data1 = c1.history(period = "3mo")
-data2 = c2.history(period = "3mo")
-data3 = c3.history(period = "3mo")
-data4 = c4.history(period = "3mo")
+            # --- Display Historical Data ---
+            st.write("#### Historical Data (last 3 months)")
+            st.dataframe(data)
 
-#for apple
-st.write(""" ### Apple """)
-st.write(c1.info['longBusinessSummary'])
-st.write(apple)
-st.line_chart(data1.values)
+            # --- Display Line Chart ---
+            st.write("#### Stock Price Chart")
+            st.line_chart(data['Close'])
 
-st.write(""" ### Microsoft """)
-st.write(c2.info['longBusinessSummary'])
-st.write(microsoft)
-st.line_chart(data2.values)
-
-st.write(""" ### Tesla """)
-st.write(c3.info['longBusinessSummary'])
-st.write(tesla)
-st.line_chart(data3.values)
-
-st.write(""" ### Tata consultancy services """)
-st.write(c4.info['longBusinessSummary'])
-st.write(tcs)
-st.line_chart(data4.values)
-
-st.sidebar.success("select a page above")
+    except Exception as e:
+        st.error(f"An error occurred: {e}. Please make sure the ticker symbol is correct.")
