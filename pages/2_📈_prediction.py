@@ -10,67 +10,87 @@ from datetime import date
 st.set_page_config(page_title="📈 Stock Forecast App", layout="wide")
 
 # --- Sidebar Navigation ---
-st.sidebar.page_link("1_🏠_Homepage.py", label="Homepage")
+st.sidebar.page_link("1_🏠_Homepage.py", label="Stock Information")
 st.sidebar.page_link("pages/2_📈_prediction.py", label="Stock Prediction")
 
-# Title
 st.title("📈 Stock Price Prediction")
 
-# --- Stock Selection ---
-stocks = ("AAPL", "MSFT", "TSLA", "GOOG", "AMZN", "TCS.BO")
-selected_stock = st.selectbox("Select a stock for prediction", stocks)
-
-# --- Date Selection ---
-start_date = st.date_input("Select start date for prediction", date(2023, 1, 1))
-end_date = date.today() # Predict up to the current date
-
-# --- Load Stock Data ---
+# --- Load Ticker Data ---
 @st.cache_data
-def load_data(ticker, start, end):
-    data = yf.download(ticker, start, end)
-    data.reset_index(inplace=True)
-    return data
+def load_ticker_data():
+    try:
+        return pd.read_csv("tickers.csv")
+    except FileNotFoundError:
+        st.error("The 'tickers.csv' file was not found. Please add it to your repository.")
+        return None
 
-data_load_state = st.text(f"Loading data for {selected_stock}...")
-data = load_data(selected_stock, start_date, end_date)
-data_load_state.text(f"Loading data for {selected_stock}...done!")
+tickers_df = load_ticker_data()
 
-# --- Display Raw Data ---
-st.subheader("Raw Stock Data")
-st.write(data.tail())
+if tickers_df is not None:
+    # --- Company and Date Selection in Sidebar ---
+    st.sidebar.header("Prediction Settings")
+    
+    company_name = st.sidebar.selectbox(
+        "Search for a company",
+        tickers_df["Name"]
+    )
+    
+    start_date = st.sidebar.date_input("Select start date", date(2023, 1, 1))
+    end_date = date.today()
+    period = st.sidebar.slider("Days to forecast into the future", 1, 365, 90)
 
-def plot_raw_data():
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name='Stock Open'))
-    fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name='Stock Close'))
-    fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
-    st.plotly_chart(fig)
+    # Get the corresponding ticker symbol
+    ticker_symbol = tickers_df[tickers_df["Name"] == company_name]["Ticker"].iloc[0]
 
-plot_raw_data()
+    # --- Load Stock Data ---
+    data_load_state = st.text(f"Loading data for {company_name}...")
+    
+    @st.cache_data
+    def load_data(ticker, start, end):
+        data = yf.download(ticker, start, end)
+        data.reset_index(inplace=True)
+        return data
 
-# --- Forecasting ---
-if not data.empty:
-    df_train = data[['Date', 'Close']].rename(columns={"Date": "ds", "Close": "y"})
+    data = load_data(ticker_symbol, start_date, end_date)
+    data_load_state.text(f"Loading data for {company_name}... Done!")
 
-    # Calculate prediction period
-    n_days = (end_date - start_date).days
-    period = st.slider("Select number of days for prediction", 1, 365, 90)
+    if not data.empty:
+        # Display Raw Data
+        st.subheader("Raw Stock Data")
+        st.write(data.tail())
 
-    m = Prophet()
-    m.fit(df_train)
-    future = m.make_future_dataframe(periods=period)
-    forecast = m.predict(future)
+        # Plot Raw Data
+        def plot_raw_data():
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name='Stock Open'))
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name='Stock Close'))
+            fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
+            st.plotly_chart(fig)
+        plot_raw_data()
 
-    # --- Display Predicted Data ---
-    st.subheader("Predicted Data")
-    st.write(forecast.tail())
+        # Forecasting
+        st.subheader("Future Price Forecast")
+        df_train = pd.DataFrame({
+            'ds': pd.to_datetime(data['Date']),
+            'y': pd.to_numeric(data['Close'])
+        })
 
-    st.write('### Prediction Chart')
-    fig1 = plot_plotly(m, forecast)
-    st.plotly_chart(fig1)
+        try:
+            m = Prophet()
+            m.fit(df_train)
+            future = m.make_future_dataframe(periods=period)
+            forecast = m.predict(future)
 
-    st.write("### Prediction Components")
-    fig2 = m.plot_components(forecast)
-    st.write(fig2)
-else:
-    st.warning("No data to display. Please select a valid date range.")
+            st.write("#### Forecast Chart")
+            fig1 = plot_plotly(m, forecast)
+            st.plotly_chart(fig1)
+
+            st.write("#### Forecast Components")
+            fig2 = m.plot_components(forecast)
+            st.write(fig2)
+
+        except Exception as e:
+            st.error(f"An error occurred during forecasting: {e}")
+
+    else:
+        st.warning("No data found for the selected stock and date range.")
