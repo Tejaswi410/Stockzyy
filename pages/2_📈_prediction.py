@@ -78,6 +78,7 @@ if tickers_df is not None:
                 yaxis_title="Price (USD)",
                 legend_title="Price Type"
             )
+            plot_raw_data()
 
         # Forecasting
         st.subheader("Future Price Forecast")
