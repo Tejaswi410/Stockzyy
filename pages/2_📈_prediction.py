@@ -72,7 +72,7 @@ if tickers_df is not None:
         st.subheader("Future Price Forecast")
         df_train = pd.DataFrame({
             'ds': pd.to_datetime(data['Date']),
-            'y': pd.to_numeric(data['Close'])
+            'y': pd.to_numeric(data['Close']).squeeze()
         })
 
         try:
