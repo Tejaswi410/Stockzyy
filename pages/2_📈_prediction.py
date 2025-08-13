@@ -55,6 +55,9 @@ if tickers_df is not None:
     data = load_data(ticker_symbol, start_date, end_date)
     data_load_state.text(f"Loading data for {company_name}... Done!")
 
+    data['Date'] = pd.to_datetime(data['Date'])
+
+
     if not data.empty:
         # Display Raw Data
         st.subheader("Raw Stock Data")
