@@ -79,6 +79,17 @@ if tickers_df is not None:
         try:
             m = Prophet()
             m.fit(df_train)
+           
+            future = m.make_future_dataframe(periods=period)
+            forecast = m.predict(future)
+
+            st.write("#### Forecast Chart")
+            fig1 = plot_plotly(m, forecast)
+            st.plotly_chart(fig1)
+
+            st.write("#### Forecast Components")
+            fig2 = m.plot_components(forecast)
+            st.write(fig2)
 
             st.subheader("Model Accuracy")
             # Perform cross-validation
@@ -93,17 +104,6 @@ if tickers_df is not None:
             st.write("#### Cross-Validation Metrics")
             st.write("This table shows the model's performance on historical data.")
             st.write(df_p)
-           
-            future = m.make_future_dataframe(periods=period)
-            forecast = m.predict(future)
-
-            st.write("#### Forecast Chart")
-            fig1 = plot_plotly(m, forecast)
-            st.plotly_chart(fig1)
-
-            st.write("#### Forecast Components")
-            fig2 = m.plot_components(forecast)
-            st.write(fig2)
 
         except Exception as e:
             st.error(f"An error occurred during forecasting: {e}")
