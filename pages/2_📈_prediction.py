@@ -65,55 +65,19 @@ if tickers_df is not None:
 
         # Plot Raw Data
         def plot_raw_data():
-                fig = go.Figure()
-                fig.add_trace(go.Scatter(
-                    x=data['Date'], 
-                    y=data['Open'], 
-                    name='Stock Open',
-                    line=dict(color='lightblue', width=2),
-                    mode='lines'
-                ))
-                
-                fig.add_trace(go.Scatter(
-                    x=data['Date'], 
-                    y=data['Close'], 
-                    name='Stock Close',
-                    line=dict(color='blue', width=2),
-                    mode='lines'
-                ))
-                
-                fig.update_layout(
-                    title={
-                        'text': f"{company_name} ({ticker_symbol}) - Historical Stock Prices",
-                        'x': 0.5,
-                        'xanchor': 'center'
-                    },
-                    xaxis_title="Date",
-                    yaxis_title="Price ($)",
-                    xaxis_rangeslider_visible=True,
-                    height=600,
-                    hovermode='x unified',
-                    legend=dict(
-                        orientation="h",
-                        yanchor="bottom",
-                        y=1.02,
-                        xanchor="right",
-                        x=1
-                    )
-                )
-                
-                # Format x-axis
-                fig.update_xaxes(
-                    dtick="M1",  # Monthly ticks
-                    tickformat="%Y-%m",
-                    tickangle=45
-                )
-                
-                # Format y-axis
-                fig.update_yaxes(tickformat="$,.2f")
-                st.plotly_chart(fig, use_container_width=True)
+            st.subheader("Stock Price Chart")
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], mode='lines', name='Close Price'))
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], mode='lines', name='Open Price'))
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['High'], mode='lines', name='High Price'))
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Low'], mode='lines', name='Low Price'))
 
-        plot_raw_data()
+            fig.update_layout(
+                title=f"{company_name} Stock Prices",
+                xaxis_title="Date",
+                yaxis_title="Price (USD)",
+                legend_title="Price Type"
+            )
 
         # Forecasting
         st.subheader("Future Price Forecast")
@@ -148,7 +112,6 @@ if tickers_df is not None:
             df_p = performance_metrics(df_cv)
 
             st.write("#### Cross-Validation Metrics")
-            st.write("This table shows the model's performance on historical data.")
             st.write(df_p)
 
         except Exception as e:
