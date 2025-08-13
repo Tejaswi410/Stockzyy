@@ -61,9 +61,10 @@ if tickers_df is not None:
     if not data.empty:
         # Display Raw Data
         st.subheader("Raw Stock Data")
+        st.write(f"Showing data for {company_name} from {start_date} to {end_date}")
         st.write(data.head())
         st.write(data.tail())
-        st.write(f"Showing data for {company_name} from {start_date} to {end_date}")
+        
 
 
         # Forecasting
@@ -76,33 +77,50 @@ if tickers_df is not None:
         try:
             m = Prophet()
             m.fit(df_train)
-           
+        
             future = m.make_future_dataframe(periods=period)
             forecast = m.predict(future)
 
-            st.write("#### Forecast Chart")
-            fig1 = plot_plotly(m, forecast)
-            st.plotly_chart(fig1)
-
-            st.write("#### Forecast Components")
-            fig2 = m.plot_components(forecast)
-            st.write(fig2)
-
-            st.subheader("Model Accuracy")
-            # Perform cross-validation
-            # initial: The size of the initial training period
-            # period: The spacing between cutoff dates
-            # Perform cross-validation with shorter, more appropriate windows
-            df_cv = cross_validation(m, initial='365 days', period='90 days', horizon='90 days', parallel="threads")
-
-            # Calculate performance metrics
-            df_p = performance_metrics(df_cv)
-
-            st.write("#### Cross-Validation Metrics")
-            st.write(df_p)
+            # Forecast Chart Section
+            with st.container():
+                st.write("#### 📈 Forecast Chart")
+                fig1 = plot_plotly(m, forecast)
+                st.plotly_chart(fig1, use_container_width=True)
+            
+            # Add visual separator
+            st.divider()
+            
+            # Components Section
+            with st.container():
+                st.write("#### 🔄 Forecast Components")
+                fig2 = m.plot_components(forecast)
+                st.write(fig2)
+            
+            # Add another visual separator
+            st.divider()
+            
+            # Performance Metrics Section
+            with st.container():
+                st.write("#### 📊 Model Performance")
+                st.info("💡 These metrics show how well the model performs on historical data")
+                
+                # Create columns for better layout
+                col1, col2 = st.columns([2, 1])
+                
+                with col1:
+                    # Performance metrics
+                    df_cv = cross_validation(m, initial='365 days', period='90 days', horizon='90 days', parallel="threads")
+                    df_p = performance_metrics(df_cv)
+                    st.dataframe(df_p, use_container_width=True)
+                
+                with col2:
+                    st.write("**Metric Explanations:**")
+                    st.write("• **MAE**: Mean Absolute Error")
+                    st.write("• **MSE**: Mean Squared Error")
+                    st.write("• **RMSE**: Root Mean Squared Error")
+                    st.write("• **MAPE**: Mean Absolute Percentage Error")
 
         except Exception as e:
             st.error(f"An error occurred during forecasting: {e}")
-
-    else:
-        st.warning("No data found for the selected stock and date range.")
+        else:
+            st.warning("No data found for the selected stock and date range.")
