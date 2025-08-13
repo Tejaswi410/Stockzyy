@@ -65,7 +65,7 @@ if tickers_df is not None:
         st.write(data.head())
         st.write(data.tail())
         
-
+        st.divider()
 
         # Forecasting
         st.subheader("Future Price Forecast")
@@ -122,5 +122,5 @@ if tickers_df is not None:
 
         except Exception as e:
             st.error(f"An error occurred during forecasting: {e}")
-        else:
-            st.warning("No data found for the selected stock and date range.")
+    else:
+        st.warning("No data found for the selected stock and date range.")
