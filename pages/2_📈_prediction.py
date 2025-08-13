@@ -66,19 +66,7 @@ if tickers_df is not None:
 
         # Plot Raw Data
         def plot_raw_data():
-            st.subheader("Stock Price Chart")
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], mode='lines', name='Close Price'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], mode='lines', name='Open Price'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['High'], mode='lines', name='High Price'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Low'], mode='lines', name='Low Price'))
-
-            fig.update_layout(
-                title=f"{company_name} Stock Prices",
-                xaxis_title="Date",
-                yaxis_title="Price (USD)",
-                legend_title="Price Type"
-            )
+           print("hello")
         plot_raw_data()
 
         # Forecasting
