@@ -110,7 +110,7 @@ if tickers_df is not None:
                 )
                 
                 # Format y-axis
-                fig.update_yaxis(tickformat="$,.2f")
+                fig.update_yaxes(tickformat="$,.2f")
                 st.plotly_chart(fig, use_container_width=True)
 
         plot_raw_data()
