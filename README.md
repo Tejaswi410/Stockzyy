@@ -55,12 +55,6 @@ Open the local server (usually `http://localhost:8501`) and:
   * `tickers.csv`: Contains a list of company names and their corresponding stock ticker symbols.
   * **Data Source**: The application uses the `yfinance` library to fetch stock data.
 
-## 📅 Future Roadmap
-
-  * 🧠 Add multiple ML forecasting models (ARIMA, LSTM).
-  * 📊 Extra chart types (moving averages, volume analysis).
-  * ☁️ Deploy to Streamlit Cloud / Heroku.
-  * 🛠 Add training & evaluation metrics for transparency.
 
 ## 🤝 Contributing
 
