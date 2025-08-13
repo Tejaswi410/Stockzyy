@@ -103,7 +103,7 @@ if tickers_df is not None:
                 )
                 
                 # Format x-axis
-                fig.update_xaxis(
+                fig.update_xaxes(
                     dtick="M1",  # Monthly ticks
                     tickformat="%Y-%m",
                     tickangle=45
