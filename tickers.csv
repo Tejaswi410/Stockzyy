@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Company,Symbol
 1-800-Flowers.Com Inc,FLWS
 1347 Property Insurance Holdings Inc,PIH
@@ -4038,3 +4039,53 @@ pdvWireless Inc,PDVW
 tronc Inc,TRNC
 vTv Therapeutics Inc,VTVT
 xG Technology Inc,XGTI
+=======
+Ticker,Name
+AAPL,Apple Inc.
+MSFT,Microsoft Corporation
+GOOG,Alphabet Inc. (Google)
+GOOGL,Alphabet Inc. (Google)
+AMZN,Amazon.com, Inc.
+NVDA,NVIDIA Corporation
+TSLA,Tesla, Inc.
+META,Meta Platforms, Inc.
+BRK-B,Berkshire Hathaway Inc.
+JPM,JPMorgan Chase & Co.
+JNJ,Johnson & Johnson
+V,Visa Inc.
+PG,Procter & Gamble Co.
+HD,The Home Depot, Inc.
+MA,Mastercard Incorporated
+UNH,UnitedHealth Group Incorporated
+BAC,Bank of America Corporation
+WMT,Walmart Inc.
+XOM,Exxon Mobil Corporation
+CVX,Chevron Corporation
+PFE,Pfizer Inc.
+KO,The Coca-Cola Company
+PEP,PepsiCo, Inc.
+DIS,The Walt Disney Company
+NFLX,Netflix, Inc.
+ADBE,Adobe Inc.
+CRM,Salesforce, Inc.
+INTC,Intel Corporation
+CSCO,Cisco Systems, Inc.
+ORCL,Oracle Corporation
+IBM,International Business Machines Corporation
+T,AT&T Inc.
+VZ,Verizon Communications Inc.
+GS,The Goldman Sachs Group, Inc.
+C,Citigroup Inc.
+F,Ford Motor Company
+GM,General Motors Company
+BA,The Boeing Company
+CAT,Caterpillar Inc.
+MCD,McDonald's Corporation
+SBUX,Starbucks Corporation
+NKE,NIKE, Inc.
+TCS.BO,Tata Consultancy Services Limited
+RELIANCE.NS,Reliance Industries Limited
+HDB,HDFC Bank Limited
+INFY,Infosys Limited
+INFY,Infosys Limited
+>>>>>>> a26efd2c9e26d8b17b6e57435034e489208c18bf
