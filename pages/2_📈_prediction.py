@@ -61,35 +61,10 @@ if tickers_df is not None:
     if not data.empty:
         # Display Raw Data
         st.subheader("Raw Stock Data")
+        st.write(data.head())
         st.write(data.tail())
         st.write(f"Showing data for {company_name} from {start_date} to {end_date}")
 
-        # Plot Raw Data
-        def plot_raw_data():
-            st.subheader("Stock Price Chart")
-            st.write("Debug Info:")
-            st.write(f"Data shape: {data.shape}")
-            st.write(f"Date range: {data['Date'].min()} to {data['Date'].max()}")
-            st.write(f"Close price range: ${data['Close'].min():.2f} to ${data['Close'].max():.2f}")
-            st.write("Sample data:")
-            st.write(data[['Date', 'Open', 'High', 'Low', 'Close']].tail())
-            
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], mode='lines', name='Close Price'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], mode='lines', name='Open Price'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['High'], mode='lines', name='High Price'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Low'], mode='lines', name='Low Price'))
-
-            fig.update_layout(
-                title=f"{company_name} Stock Prices",
-                xaxis_title="Date",
-                yaxis_title="Price (USD)",
-                legend_title="Price Type"
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-
-        plot_raw_data()
 
         # Forecasting
         st.subheader("Future Price Forecast")
