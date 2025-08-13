@@ -63,14 +63,9 @@ if tickers_df is not None:
         st.subheader("Raw Stock Data")
         st.write(data.tail())
 
-        # Plot Raw Data
-        def plot_raw_data():
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name='Stock Open'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name='Stock Close'))
-            fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
-            st.plotly_chart(fig)
-        plot_raw_data()
+        # --- Display Historical Data and Chart ---
+        st.write("#### Stock Price Chart")
+        st.line_chart(data[['Open', 'Close']])
 
         # Forecasting
         st.subheader("Future Price Forecast")
