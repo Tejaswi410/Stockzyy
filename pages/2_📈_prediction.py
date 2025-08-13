@@ -62,6 +62,7 @@ if tickers_df is not None:
         # Display Raw Data
         st.subheader("Raw Stock Data")
         st.write(data.tail())
+        st.write(f"Showing data for {company_name} from {start_date} to {end_date}")
 
         # Plot Raw Data
         def plot_raw_data():
@@ -78,7 +79,7 @@ if tickers_df is not None:
                 yaxis_title="Price (USD)",
                 legend_title="Price Type"
             )
-            plot_raw_data()
+        plot_raw_data()
 
         # Forecasting
         st.subheader("Future Price Forecast")
