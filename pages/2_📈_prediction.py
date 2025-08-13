@@ -11,8 +11,8 @@ from datetime import date
 st.set_page_config(page_title="📈 Stock Forecast App", layout="wide")
 
 # --- Sidebar Navigation ---
-st.sidebar.page_link("1_🏠_Homepage.py")
-st.sidebar.page_link("pages/2_📈_prediction.py")
+st.sidebar.page_link("1_🏠_Homepage.py",label = "Stock Information")
+st.sidebar.page_link("pages/2_📈_prediction.py", label = "Stock Prediction")
 
 st.title("📈 Stock Price Prediction")
 
@@ -65,11 +65,54 @@ if tickers_df is not None:
 
         # Plot Raw Data
         def plot_raw_data():
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name='Stock Open'))
-            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name='Stock Close'))
-            fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
-            st.plotly_chart(fig)
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                    x=data['Date'], 
+                    y=data['Open'], 
+                    name='Stock Open',
+                    line=dict(color='lightblue', width=2),
+                    mode='lines'
+                ))
+                
+                fig.add_trace(go.Scatter(
+                    x=data['Date'], 
+                    y=data['Close'], 
+                    name='Stock Close',
+                    line=dict(color='blue', width=2),
+                    mode='lines'
+                ))
+                
+                fig.update_layout(
+                    title={
+                        'text': f"{company_name} ({ticker_symbol}) - Historical Stock Prices",
+                        'x': 0.5,
+                        'xanchor': 'center'
+                    },
+                    xaxis_title="Date",
+                    yaxis_title="Price ($)",
+                    xaxis_rangeslider_visible=True,
+                    height=600,
+                    hovermode='x unified',
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1
+                    )
+                )
+                
+                # Format x-axis
+                fig.update_xaxis(
+                    dtick="M1",  # Monthly ticks
+                    tickformat="%Y-%m",
+                    tickangle=45
+                )
+                
+                # Format y-axis
+                fig.update_yaxis(tickformat="$,.2f")
+                st.plotly_chart(fig, use_container_width=True)
+
         plot_raw_data()
 
         # Forecasting
