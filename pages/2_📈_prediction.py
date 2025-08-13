@@ -84,8 +84,8 @@ if tickers_df is not None:
             # Perform cross-validation
             # initial: The size of the initial training period
             # period: The spacing between cutoff dates
-            # horizon: The forecast horizon
-            df_cv = cross_validation(m, initial='730 days', period='180 days', horizon='365 days')
+            # Perform cross-validation with shorter, more appropriate windows
+            df_cv = cross_validation(m, initial='365 days', period='90 days', horizon='90 days', parallel="threads")
 
             # Calculate performance metrics
             df_p = performance_metrics(df_cv)
