@@ -19,7 +19,7 @@ st.title("📈 Stock Price Prediction")
 @st.cache_data
 def load_ticker_data():
     try:
-        return pd.read_csv("tickers.csv",header = None)
+        return pd.read_csv("tickers.csv",on_bad_lines='skip')
     except FileNotFoundError:
         st.error("The 'tickers.csv' file was not found. Please add it to your repository.")
         return None
