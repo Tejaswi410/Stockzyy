@@ -2,6 +2,7 @@ import streamlit as st
 import yfinance as yf
 from prophet import Prophet
 from prophet.plot import plot_plotly
+from prophet.diagnostics import cross_validation, performance_metrics
 from plotly import graph_objs as go
 import pandas as pd
 from datetime import date
@@ -78,6 +79,21 @@ if tickers_df is not None:
         try:
             m = Prophet()
             m.fit(df_train)
+
+            st.subheader("Model Accuracy")
+            # Perform cross-validation
+            # initial: The size of the initial training period
+            # period: The spacing between cutoff dates
+            # horizon: The forecast horizon
+            df_cv = cross_validation(m, initial='730 days', period='180 days', horizon='365 days')
+
+            # Calculate performance metrics
+            df_p = performance_metrics(df_cv)
+
+            st.write("#### Cross-Validation Metrics")
+            st.write("This table shows the model's performance on historical data.")
+            st.write(df_p)
+           
             future = m.make_future_dataframe(periods=period)
             forecast = m.predict(future)
 
