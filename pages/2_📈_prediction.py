@@ -66,7 +66,7 @@ if tickers_df is not None:
 
         # Plot Raw Data
         def plot_raw_data():
-           print("hello")
+           st.write("hello")
         plot_raw_data()
 
         # Forecasting
