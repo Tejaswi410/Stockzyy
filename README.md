@@ -3,6 +3,8 @@
 **Stockzyy** is a 💻 Streamlit-powered web application for **finance** & **stock price prediction**.  
 It lets you explore 📊 historical stock data, visualize trends, and even forecast 📅 future movements — all through an intuitive interface.  
 
+This has been deployed you can check it out here!!...[stockzyy.streamlit.app](https://stockzyy.streamlit.app/)
+
 ---
 
 ## ✨ Features  
