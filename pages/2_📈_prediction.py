@@ -11,8 +11,8 @@ from datetime import date
 st.set_page_config(page_title="📈 Stock Forecast App", layout="wide")
 
 # --- Sidebar Navigation ---
-st.sidebar.page_link("1_🏠_Homepage.py", label="Stock Information")
-st.sidebar.page_link("pages/2_📈_prediction.py", label="Stock Prediction")
+st.sidebar.page_link("1_🏠_Homepage.py")
+st.sidebar.page_link("pages/2_📈_prediction.py")
 
 st.title("📈 Stock Price Prediction")
 
@@ -63,9 +63,14 @@ if tickers_df is not None:
         st.subheader("Raw Stock Data")
         st.write(data.tail())
 
-        # --- Display Historical Data and Chart ---
-        st.write("#### Stock Price Chart")
-        st.line_chart(data[['Open', 'Close']])
+        # Plot Raw Data
+        def plot_raw_data():
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Open'], name='Stock Open'))
+            fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], name='Stock Close'))
+            fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
+            st.plotly_chart(fig)
+        plot_raw_data()
 
         # Forecasting
         st.subheader("Future Price Forecast")
